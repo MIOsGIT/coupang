@@ -11,10 +11,8 @@ import { user_findone_response_dto } from 'src/dto/user.findone.response';
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User, 'coupang')
-        private userRepository: Repository<User>,
-        @InjectRepository(Product, 'coupang')
-        private productRepository: Repository<Product>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>
     ){}
 
     // 유저 생성

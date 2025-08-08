@@ -6,7 +6,7 @@ import { User } from './entity/user.entity';
 import { Product } from 'src/product/entity/product.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Product], 'coupang')],
+  imports: [TypeOrmModule.forFeature([User])],
   exports: [TypeOrmModule],
   providers: [UserService],
   controllers: [UserController]
