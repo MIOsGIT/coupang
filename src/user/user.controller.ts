@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { user_create_reponse_dto } from 'src/dto/user.create.response';
 import { user_create_request_dto } from 'src/dto/user.create.request';
 import { user_delete_request_dto } from 'src/dto/user.delete.request';
+import { user_findone_request_dto } from 'src/dto/user.findone.request';
 
 @Controller('user')
 export class UserController {
@@ -11,10 +12,15 @@ export class UserController {
     this.userService = _userService;
     }
 
-    @Get()
+    @Get('/All')
     findAll_user(): Promise<user_create_reponse_dto[]> {
     const result = this.userService.findAll_user();
     return result;
+    }
+
+    @Get()
+    async findOne(@Body() body: user_findone_request_dto){
+    return this.userService.findOneByUserId(body);
     }
 
     @Post()

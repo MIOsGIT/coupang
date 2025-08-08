@@ -29,7 +29,6 @@ export class Product{
     }
 
     setter(dto: product_create_response_dto){
-            this.productnumber = dto.productnumber;
             this.name = dto.name;
             this.price = dto.price;
             this.stock = dto.stock;
