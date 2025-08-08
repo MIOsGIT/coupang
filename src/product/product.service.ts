@@ -57,6 +57,7 @@ export class ProductService {
             }
 
             return products.map(product => ({
+                productnumber: product.productnumber,
                 name: product.name,
                 price: product.price,
                 stock: product.stock,
@@ -80,6 +81,7 @@ export class ProductService {
                 throw new NotFoundException('해당 유저의 상품을 찾을 수 없습니다.');
             }
             return products.map(product => ({
+                productnumber: product.productnumber,
                 name: product.name,
                 price: product.price,
                 stock: product.stock,
