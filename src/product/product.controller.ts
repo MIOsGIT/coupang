@@ -6,6 +6,7 @@ import { product_findone_request_dto } from 'src/dto/product.findone.request';
 import { product_create_request_dto } from 'src/dto/product.create.request';
 import { product_findone_byID_request_dto } from 'src/dto/product.findone.byID.request';
 import { product_delete_request_dto } from 'src/dto/product.delete.request';
+import { product_purchase_request_dto } from 'src/dto/product.purchase.request';
 
 @Controller('product')
 export class ProductController {
@@ -38,4 +39,10 @@ export class ProductController {
         remove_product(@Body() body: product_delete_request_dto){
         return this.productservice.remove_product(body);
         }
+
+        @Post('/purchase')
+        async purchaseProduct(@Body() body: product_purchase_request_dto) {
+        await this.productservice.purchase(body);
+        return { message: '상품 구매가 완료되었습니다.' };
+    }
 }

@@ -8,6 +8,7 @@ import { product_findone_reponse_dto } from 'src/dto/product.findone.response';
 import { product_findone_byID_request_dto } from 'src/dto/product.findone.byID.request';
 import { product_create_request_dto } from 'src/dto/product.create.request';
 import { product_delete_request_dto } from 'src/dto/product.delete.request';
+import { product_purchase_request_dto } from 'src/dto/product.purchase.request';
 
 @Injectable()
 export class ProductService {
@@ -113,5 +114,30 @@ export class ProductService {
             throw new BadRequestException('본인의 상품만 삭제할 수 있습니다.');
         }
         await this.productRepository.delete(body.productnumber);
+    }
+
+    // 상품 구매
+    async purchase(body: product_purchase_request_dto): Promise<void> {
+        const product = await this.productRepository.findOne({
+            where: { productnumber: body.productnumber },
+            relations: ['user']
+        });
+        if (!product) {
+            throw new NotFoundException('구매하려는 상품이 존재하지 않습니다.');
+        }
+        const buyer = await this.userRepository.findOne({
+            where: { id: body.buyerid }
+        });
+        if (!buyer || buyer.pw !== body.buyerpw) {
+            throw new NotFoundException('회원 정보가 일치하지 않습니다!');
+        }
+        if (product.user.id === buyer.id) {
+            throw new BadRequestException('자신이 등록한 상품은 구매할 수 없습니다.');
+        }
+        if (product.stock < body.quantity) {
+            throw new BadRequestException('상품 재고가 부족합니다.');
+        }
+        product.stock -= body.quantity;
+        await this.productRepository.save(product);
     }
 }
