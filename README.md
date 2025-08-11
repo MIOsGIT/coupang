@@ -13,30 +13,6 @@
 
 ---
 
-<h2 align="center">📂 프로젝트 구조</h2>
-
-<pre align="center">
-src
-├── dto                  # 요청/응답 DTO
-├── product              # 상품 관련 API
-│   ├── entity           # 상품 엔티티
-│   ├── product.controller.ts
-│   ├── product.module.ts
-│   └── product.service.ts
-├── user                 # 사용자 관련 API
-│   ├── entity           # 사용자 엔티티
-│   ├── security         # 인증/인가
-│   │   ├── passport.jwt.strategy.ts
-│   │   ├── payload.interface.ts
-│   │   └── user.guard.ts
-│   ├── user.controller.ts
-│   ├── user.module.ts
-│   └── user.service.ts
-├── app.controller.ts
-├── app.module.ts        # 루트 모듈
-└── app.service.ts
-</pre>
-
 <h2 align="center">✨ 기능</h2>
 
 <p align="center">
