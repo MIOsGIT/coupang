@@ -124,14 +124,14 @@ export class ProductService {
             where: { productnumber: body.productnumber },
             relations: ['user'],
         });
-        if (!product) {
-            throw new NotFoundException('구매하려는 상품이 존재하지 않습니다.');
-        }
         const user_ok = await this.userRepository.findOne({
             where: { id: buyerId },
         });
         if (!user_ok) {
             throw new NotFoundException('회원 정보가 일치하지 않습니다.');
+        }
+        if (!product) {
+            throw new NotFoundException('구매하려는 상품이 존재하지 않습니다.');
         }
         if (product.user.id === user_ok.id) {
             throw new BadRequestException('자신이 등록한 상품은 구매할 수 없습니다.');
