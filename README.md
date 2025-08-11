@@ -25,13 +25,11 @@
 <h2 align="center">🛠 사용 기술</h2>
 
 <p align="center">
-  
 백엔드 프레임워크  |  NestJS<br>
 언어  |  TypeScript<br>
 DB  |  MariaDB<br>
 인증  |  JWT, Passport<br>
 ORM  |  TypeORM
-
 </p>
 
 ---
