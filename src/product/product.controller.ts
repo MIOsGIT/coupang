@@ -15,7 +15,7 @@ export class ProductController {
         this.productservice = _productservice;
         }
     
-        @Get('/All')
+        @Get('/all')
         async findAll_product(): Promise<Product[]> {
         return this.productservice.findAll_product();
         }

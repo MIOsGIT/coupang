@@ -7,12 +7,18 @@ import { user_create_request_dto } from 'src/dto/user.create.request';
 import { user_delete_request_dto } from 'src/dto/user.delete.request';
 import { user_findone_request_dto } from 'src/dto/user.findone.request';
 import { user_findone_response_dto } from 'src/dto/user.findone.response';
+import { user_login_request_dto } from 'src/dto/user.login.request';
+import { Payload } from './security/payload.interface';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { FindOneOptions } from "typeorm";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User>
+        private userRepository: Repository<User>,
+        private jwtservice: JwtService
     ){}
 
     // 유저 생성
@@ -46,4 +52,28 @@ export class UserService {
     async remove_user(body: user_delete_request_dto): Promise<void> {
         await this.userRepository.delete(body);
     }
+
+    // 로그인
+    async validateUser(body: user_login_request_dto): Promise<{accessToken: string}> {
+    const user_ok : User | null = await this.userRepository.findOne({
+        where: { id: body.id }
+    });
+    if(!user_ok || user_ok.pw !== body.pw) {
+        throw new UnauthorizedException('회원 정보가 일치하지 않습니다!');
+    }
+    const payload: Payload = { id: user_ok.id, name: user_ok.name };
+    return {
+        accessToken: this.jwtservice.sign(payload),
+    };
+    }
+
+    async findByFields(options: FindOneOptions<user_login_request_dto>): Promise<User | null> {
+        return await this.userRepository.findOne(options);
+    }
+
+    async tokenValidateUser(payload: Payload): Promise<user_login_request_dto | null> {
+        return await this.findByFields({
+        where: { id: payload.id }
+    });
+}
 }
