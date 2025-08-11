@@ -20,12 +20,11 @@ export class ProductService {
     ){}
 
     // 상품 생성
-    async create(body:product_create_request_dto): Promise<void> {
+    async create(body:product_create_request_dto, buyerId: string): Promise<void> {
         const user_ok : User | null = await this.userRepository.findOne({
-        where: { id : body.sellerid }
+            where: { id : buyerId }
         });
-
-        if (user_ok && user_ok.pw === body.sellerpw) {
+        if (user_ok) {
             if (user_ok.isSeller) {
                 const productData = new Product();
                 productData.setter(body); 
@@ -95,43 +94,46 @@ export class ProductService {
     }
 
     // 상품 삭제
-    async remove_product(body: product_delete_request_dto): Promise<void> {
-        const user_ok = await this.userRepository.findOne({
-        where: { id: body.sellerid }
+    async remove_product(body: product_delete_request_dto, buyerId: string): Promise<void> {
+        const user_ok : User | null = await this.userRepository.findOne({
+            where: { id : buyerId }
         });
-
-        if (!user_ok || user_ok.pw !== body.sellerpw) {
-            throw new BadRequestException('회원 정보가 일치하지 않습니다!');
+        if (!user_ok) {
+            throw new BadRequestException('회원 정보가 일치하지 않습니다.');
         }
         const product = await this.productRepository.findOne({
             where: { productnumber: body.productnumber },
             relations: ['user']
         });
+
+        if (!user_ok.isSeller) {
+            throw new BadRequestException('상품 삭제는 판매자 회원만 가능합니다.');
+        }
         if (!product) {
             throw new NotFoundException('상품이 존재하지 않습니다.');
         }
-        if (product.user.id !== body.sellerid) {
+        if (product.user.id !== user_ok?.id) {
             throw new BadRequestException('본인의 상품만 삭제할 수 있습니다.');
         }
         await this.productRepository.delete(body.productnumber);
     }
 
     // 상품 구매
-    async purchase(body: product_purchase_request_dto): Promise<void> {
+    async purchase(body: product_purchase_request_dto, buyerId: string): Promise<void> {
         const product = await this.productRepository.findOne({
             where: { productnumber: body.productnumber },
-            relations: ['user']
+            relations: ['user'],
         });
         if (!product) {
             throw new NotFoundException('구매하려는 상품이 존재하지 않습니다.');
         }
-        const buyer = await this.userRepository.findOne({
-            where: { id: body.buyerid }
+        const user_ok = await this.userRepository.findOne({
+            where: { id: buyerId },
         });
-        if (!buyer || buyer.pw !== body.buyerpw) {
-            throw new NotFoundException('회원 정보가 일치하지 않습니다!');
+        if (!user_ok) {
+            throw new NotFoundException('회원 정보가 일치하지 않습니다.');
         }
-        if (product.user.id === buyer.id) {
+        if (product.user.id === user_ok.id) {
             throw new BadRequestException('자신이 등록한 상품은 구매할 수 없습니다.');
         }
         if (product.stock < body.quantity) {

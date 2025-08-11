@@ -12,35 +12,35 @@ import { UserGuards } from './security/user.guard';
 export class UserController {
     private readonly userService: UserService;
     constructor(_userService: UserService) {
-    this.userService = _userService;
+        this.userService = _userService;
     }
 
     @Get('/all')
     findAll_user(): Promise<user_create_reponse_dto[]> {
     const result = this.userService.findAll_user();
-    return result;
+        return result;
     }
 
     @Get()
     async findOne(@Body() body: user_findone_request_dto){
-    return this.userService.findOneByUserId(body);
+        return this.userService.findOneByUserId(body);
     }
 
     @Post()
     async create_user(@Body() body: user_create_request_dto){
-    return this.userService.create_user(body);
+        return this.userService.create_user(body);
     }
 
     @Delete()
     async remote_user(@Body() body: user_delete_request_dto){
-    this.userService.remove_user(body);
+        this.userService.remove_user(body);
     }
 
     @Post('/login')
     async login(@Body() body: user_login_request_dto, @Res() res: Response): Promise<any> {
-    const jwt = await this.userService.validateUser(body);
-    res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
-    return res.json(jwt);
+        const jwt = await this.userService.validateUser(body);
+        res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
+        return res.json(jwt);
     }
 
     @Get('/authenticate')

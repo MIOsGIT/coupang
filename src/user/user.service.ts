@@ -67,13 +67,15 @@ export class UserService {
     };
     }
 
+    // 유저 정보 확인
     async findByFields(options: FindOneOptions<user_login_request_dto>): Promise<User | null> {
         return await this.userRepository.findOne(options);
     }
 
+    // 토큰 확인
     async tokenValidateUser(payload: Payload): Promise<user_login_request_dto | null> {
         return await this.findByFields({
-        where: { id: payload.id }
-    });
-}
+            where: { id: payload.id }
+        });
+    }
 }
