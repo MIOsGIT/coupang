@@ -4,7 +4,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/NestJS-FF69B4?style=for-the-badge&logo=nestjs&logoColor=white" />
   <img src="https://img.shields.io/badge/TypeScript-ffb6c1?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/PostgreSQL-ff69b4?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/MariaDB-ff69b4?style=for-the-badge&logo=mariadb&logoColor=white" />
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@
 |----------------|-----------------|
 | 백엔드 프레임워크 | NestJS          |
 | 언어           | TypeScript      |
-| DB             | PostgreSQL      |
+| DB             | MariaDB         |
 | 인증           | JWT, Passport   |
 | ORM            | TypeORM         |
 
