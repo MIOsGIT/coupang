@@ -26,10 +26,10 @@
 
 <p align="center">
   
-백엔드 프레임워크  |  NestJS
-언어  |  TypeScript
-DB  |  MariaDB
-인증  |  JWT, Passport
+백엔드 프레임워크  |  NestJS<br>
+언어  |  TypeScript<br>
+DB  |  MariaDB<br>
+인증  |  JWT, Passport<br>
 ORM  |  TypeORM
 
 </p>
