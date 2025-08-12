@@ -6,7 +6,7 @@ import { user_delete_request_dto } from 'src/dto/user.delete.request';
 import { user_findone_request_dto } from 'src/dto/user.findone.request';
 import { user_login_request_dto } from 'src/dto/user.login.request';
 import { Response, Request } from 'express';
-import { UserGuards } from './security/user.guard';
+import { AuthGuard } from './security/user.guard';
 
 @Controller('user')
 export class UserController {
@@ -32,21 +32,21 @@ export class UserController {
     }
 
     @Delete()
+    @UseGuards(AuthGuard)
     async remote_user(@Body() body: user_delete_request_dto){
         this.userService.remove_user(body);
     }
 
     @Post('/login')
-    async login(@Body() body: user_login_request_dto, @Res() res: Response): Promise<any> {
-        const jwt = await this.userService.validateUser(body);
-        res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
-        return res.json(jwt);
+    async login(@Body() body: user_login_request_dto): Promise<any> {
+        const result = await this.userService.login(body);
+        return result;
     }
 
-    @Get('/authenticate')
-    @UseGuards(UserGuards)
-    isAuthenticated(@Req() req: Request): any { 
-        const user: any = req.user;
-        return user;
-    }
+    // @Get('/authenticate')
+    // @UseGuards(AuthGuard)
+    // isAuthenticated(@Req() req: Request): any { 
+    //     const user: any = req.user;
+    //     return user;
+    // }
 }

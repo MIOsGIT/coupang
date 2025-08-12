@@ -54,17 +54,26 @@ export class UserService {
     }
 
     // 로그인
-    async validateUser(body: user_login_request_dto): Promise<{accessToken: string}> {
-    const user_ok : User | null = await this.userRepository.findOne({
-        where: { id: body.id }
-    });
-    if(!user_ok || user_ok.pw !== body.pw) {
-        throw new UnauthorizedException('회원 정보가 일치하지 않습니다!');
-    }
-    const payload: Payload = { id: user_ok.id, name: user_ok.name };
-    return {
-        accessToken: this.jwtservice.sign(payload),
-    };
+    async login(body: user_login_request_dto){
+        // const user_ok : User | null = await this.userRepository.findOne({
+        //     where: { id: body.id }
+        // });
+        // if(!user_ok || user_ok.pw !== body.pw) {
+        //     throw new UnauthorizedException('회원 정보가 일치하지 않습니다!');
+        // }
+
+        const user = await this.userRepository
+        .createQueryBuilder('u')
+        .where('u.id = :id', { id: body.id })
+        .andWhere('u.pw = :pw', { pw: body.pw })
+        .getOne();
+
+        if (!user) throw new NotFoundException('회원 정보가 일치하지 않습니다!'); 
+        const payload = new Payload(user.id);
+        return this.jwtservice.sign(payload.toPlain(), {
+            secret: 'SECRET',
+            expiresIn: '1h'
+        });
     }
 
     // 유저 정보 확인

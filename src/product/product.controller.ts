@@ -8,7 +8,7 @@ import { product_findone_byID_request_dto } from 'src/dto/product.findone.byID.r
 import { product_delete_request_dto } from 'src/dto/product.delete.request';
 import { product_purchase_request_dto } from 'src/dto/product.purchase.request';
 import { Response, Request } from 'express';
-import { UserGuards } from 'src/user/security/user.guard';
+import { AuthGuard } from 'src/user/security/user.guard';
 
 @Controller('product')
 export class ProductController {
@@ -33,21 +33,21 @@ export class ProductController {
         }
     
         @Post()
-        @UseGuards(UserGuards)
+        @UseGuards(AuthGuard)
         create_product(@Body() body: product_create_request_dto, @Req() req: Request){
             const buyerId = (req.user as any).id;
             return this.productservice.create(body, buyerId);
         }
     
         @Delete()
-        @UseGuards(UserGuards)
+        @UseGuards(AuthGuard)
         remove_product(@Body() body: product_delete_request_dto, @Req() req: Request){
             const buyerId = (req.user as any).id;
             return this.productservice.remove_product(body, buyerId);
         }
 
         @Post('/purchase')
-        @UseGuards(UserGuards)
+        @UseGuards(AuthGuard)
         async purchaseProduct(@Body() body: product_purchase_request_dto, @Req() req: Request) {
             const buyerId = (req.user as any).id;
             await this.productservice.purchase(body, buyerId);
