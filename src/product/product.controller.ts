@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Post, Body, Query, Delete, Param, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Body, Query, Delete, Param, Res, Req, UseGuards, Headers } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { product_create_response_dto } from 'src/dto/product.create.response';
 import { Product } from './entity/product.entity';
@@ -17,28 +17,34 @@ export class ProductController {
         this.productservice = _productservice;
     }
     
+        // 상품 조회
         @Get('/all')
         async findAll_product(): Promise<Product[]> {
             return this.productservice.findAll_product();
         }
     
+        // 상품 조회 (상품 이름)
         @Get('/name')
         async findOneByName(@Body() body: product_findone_request_dto){
             return this.productservice.findOneByName(body);
         }
 
+        // 상품 조회 (판매자 id)
         @Get('/id')
         async findOneByUserId(@Body() body: product_findone_byID_request_dto){
             return this.productservice.findOneByUserId(body);
         }
     
+        // 상품 생성
         @Post()
         @UseGuards(AuthGuard)
-        create_product(@Body() body: product_create_request_dto, @Req() req: Request){
-            const buyerId = (req.user as any).id;
-            return this.productservice.create(body, buyerId);
+        create_product(@Body() body: product_create_request_dto, @Headers('token') token : string){
+            // console.log('토큰 검증 후 req.user 객체:', req.user);
+            // const buyerId = (req.user as any).id;
+            return this.productservice.create(body, token);
         }
     
+        // 상품 삭제
         @Delete()
         @UseGuards(AuthGuard)
         remove_product(@Body() body: product_delete_request_dto, @Req() req: Request){
@@ -46,6 +52,7 @@ export class ProductController {
             return this.productservice.remove_product(body, buyerId);
         }
 
+        // 상품 구매
         @Post('/purchase')
         @UseGuards(AuthGuard)
         async purchaseProduct(@Body() body: product_purchase_request_dto, @Req() req: Request) {

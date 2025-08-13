@@ -27,7 +27,7 @@ export class ProductService {
         if (user_ok) {
             if (user_ok.isSeller) {
                 const productData = new Product();
-                productData.setter(body); 
+                productData.setter(body);
                 productData.user = user_ok;
                 await this.productRepository.save(productData);
             }
