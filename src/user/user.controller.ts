@@ -6,7 +6,7 @@ import { user_delete_request_dto } from 'src/dto/user.delete.request';
 import { user_findone_request_dto } from 'src/dto/user.findone.request';
 import { user_login_request_dto } from 'src/dto/user.login.request';
 import { Response, Request } from 'express';
-import { AuthGuard } from './security/user.guard';
+import { AuthGuard } from './security/auth.guard';
 
 @Controller('user')
 export class UserController {

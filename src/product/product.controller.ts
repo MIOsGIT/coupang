@@ -8,7 +8,7 @@ import { product_findone_byID_request_dto } from 'src/dto/product.findone.byID.r
 import { product_delete_request_dto } from 'src/dto/product.delete.request';
 import { product_purchase_request_dto } from 'src/dto/product.purchase.request';
 import { Response, Request } from 'express';
-import { AuthGuard } from 'src/user/security/user.guard';
+import { AuthGuard } from 'src/user/security/auth.guard';
 
 @Controller('product')
 export class ProductController {
